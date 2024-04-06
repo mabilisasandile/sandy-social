@@ -22,7 +22,6 @@ const NavBar = () => {
 
   return (
     <div className='navbar'>
-
       <div className='left'>
         <Link to="/" style={{ textDecoration: "none" }}>
           <span>sandy_social</span>
