@@ -1,5 +1,4 @@
 import express from "express";
-const app = express();
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import postRoutes from "./routes/posts.js";
@@ -9,6 +8,9 @@ import relationshipRoutes from "./routes/relationships.js";
 import cors from "cors";
 import multer from "multer";
 import cookieParser from "cookie-parser";
+import { db } from "./connect.js";
+
+const app = express();
 
 //middlewares
 app.use((req, res, next) => {
@@ -25,7 +27,7 @@ app.use(cookieParser());
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "../client/public/upload");
+    cb(null, "../frontend/public/upload");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + file.originalname);
@@ -46,6 +48,15 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/likes", likeRoutes);
 app.use("/api/relationships", relationshipRoutes);
 
+
+db.connect(err => {
+  if (err) {
+    console.error('Error connecting to database:', err);
+    return;
+  }
+  console.log("Connected to MySQL database");
+})
+
 app.listen(8800, () => {
-  console.log("API working!");
+  console.log("Node server running at port 8800...");
 });
